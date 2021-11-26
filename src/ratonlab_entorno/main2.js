@@ -1,9 +1,22 @@
-const RatonProblem = require('./RatonProblem');
-const RatonAgent = require('./RatonAgent');
+const RatonProblem = require('./ratonProblem');
+const RatonAgent = require('./ratonAgent1');
 
 let myProblem = new RatonProblem({ maxIterations: 100 });
 
-myProblem.addAgent("Smith", RatonAgent, { x: 1, y: 7 });
+myProblem.addAgent("Smith", RatonAgent, { x: 1, y: 7, data:[
+    [1, 1, 1, 1, 1, 1, 1, 1],
+    [1, 0, 0, 0, 0, 0, 0, 1],
+    [1, 1, 0, 1, 0, 1, 1, 1],
+    [1, 0, 0, 0, 0, 1, 0, 1],
+    [1, 0, 1, 1, 0, 1, 0, 1],
+    [1, 0, 0, 1, 0, 1, 0, 1],
+    [1, 1, 0, 1, 0, 1, -1, 1],
+    [1, 0, 0, 1, 0, 0, 0, 1],
+    [1, 0, 1, 1, 0, 1, 0, 1],
+    [1, 0, 0, 0, 0, 1, 0, 1],
+    [1, 0, 1, 0, 0, 1, 0, 1],
+    [1, 1, 1, 1, 1, 1, 1, 1]
+]});
 myProblem.solve([
     [1, 1, 1, 1, 1, 1, 1, 1],
     [1, 0, 0, 0, 0, 0, 0, 1],
