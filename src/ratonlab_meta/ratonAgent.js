@@ -32,15 +32,15 @@ class CleanerAgent extends Agent {
     setup(initialState = {}) {
         this.initialState = initialState
         
-        this.state=initialState
-        // this.state.data=JSON.parse(JSON.stringify(initialState.data))
+        this.state=clone(initialState)
+        this.state.data=JSON.parse(JSON.stringify(initialState.data))
     }
     updatex(position){
         
-        // this.state.data[this.state.y][this.state.x]+=1
-        // console.log(this.state.data)
-        this.state.x=position.x
-        this.state.y=position.y
+        this.state.data[this.state.raton.y][this.state.raton.x]+=1
+        console.log(this.state.data)
+        this.state.raton.x=position.x
+        this.state.raton.y=position.y
 
     }
 
@@ -53,13 +53,14 @@ class CleanerAgent extends Agent {
         }
         let menor={
             distance:Number.POSITIVE_INFINITY,
+            value: 0,
             x:0,
             y:0,
             action:""
         }
         for(let i=0; i<possibleActions.length;i++){
-            let x=this.state.x
-            let y=this.state.y
+            let x=this.state.raton.x
+            let y=this.state.raton.y
             switch (possibleActions[i]){
                 case 'UP':
                     y-=1
@@ -79,8 +80,7 @@ class CleanerAgent extends Agent {
             
             if(y<0)y=0
             let chebyDist=Math.max(Math.abs(this.state.queso.x-x),Math.abs(this.state.queso.y-y))
-            console.log(chebyDist)
-            if(menor.distance>=chebyDist){
+            if(menor.distance >= chebyDist  && menor.value >= this.state.data[y][x]){
                 
                 menor.distance=chebyDist
                 menor.x=x
@@ -90,7 +90,7 @@ class CleanerAgent extends Agent {
             }
         }
             
-            if(this.state.data[menor.y][menor.x] !== 1){
+            if(this.initialState.data[menor.y][menor.x] !== 1){
                 
                 return [menor.action,{x:menor.x,y:menor.y}]
             }
@@ -115,6 +115,18 @@ class CleanerAgent extends Agent {
     }
     
 
+}
+function clone(initialState){
+
+    let clone = {}; // the new empty object
+    
+    // let's copy all user properties into it
+    for (let key in initialState) {
+      if (initialState.hasOwnProperty(key)) {
+      clone[key] = initialState[key];
+     }
+    }
+    return clone
 }
 
 
