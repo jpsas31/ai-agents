@@ -88,10 +88,10 @@ class CleanerAgent extends Agent {
             }
         }
             
-            if(this.initialState.data[menor.y][menor.x] !== 1){
-                
-                return [menor.action,{x:menor.x,y:menor.y}]
-            }
+        if(this.initialState.data[menor.y][menor.x] !== 1){
+            
+            return [menor.action,{x:menor.x,y:menor.y}]
+        }
 
         
         
