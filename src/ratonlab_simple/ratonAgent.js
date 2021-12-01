@@ -34,10 +34,6 @@ class CleanerAgent extends Agent {
      */
     send() {
         let viewKey = this.perception.join();
-        //let action = foo(this.internalState, this.perception)
-        //this.internalState = updatex(this.internalState, this.perception, action)
-        //return action;
-
         if (this.table[viewKey]) {
             return this.table[viewKey];
         } else {

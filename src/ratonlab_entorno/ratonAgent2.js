@@ -11,7 +11,7 @@ class CleanerAgent extends Agent {
         this.table = {
             "0,0,0,0,0": ["LEFT", "UP", "RIGHT", "DOWN"],
             "0,0,0,1,0": ["LEFT", "UP", "RIGHT"],
-            "0,0,1,0,0": ["LEFT", "UP", "DOWN"],
+            "0,0,1,0,0": ["LEFT", "DOWN", "UP"],
             "0,0,1,1,0": ["LEFT", "UP"],
             "0,1,0,0,0": ["LEFT", "RIGHT", "DOWN"],
             "0,1,0,1,0": ["LEFT", "RIGHT"],
@@ -26,19 +26,17 @@ class CleanerAgent extends Agent {
             "1,1,1,0,0": ["DOWN"],
             "default": ["TAKE"]
         };
-
+        this.entorno=[[]]
     }
     
     setup(initialState = {}) {
         this.initialState = initialState
-        
-        this.state=clone(initialState)
-        this.state.data=JSON.parse(JSON.stringify(initialState.data))
+        this.state = initialState
     }
     updatex(position){
         
-        this.state.data[this.state.y][this.state.x]+=1
-        // console.log(this.state.data)
+        this.entorno[this.state.y][this.state.x]+=1
+        // console.log(this.entorno)
         this.state.x=position.x
         this.state.y=position.y
 
@@ -46,7 +44,8 @@ class CleanerAgent extends Agent {
     setAction(){
         let viewKey = this.perception.join();
         let possibleActions= this.table[viewKey];
-        
+       
+        this.updateEntorno()
         if(!possibleActions){
             possibleActions = this.table['default']
         }
@@ -78,9 +77,9 @@ class CleanerAgent extends Agent {
             
             if(y<0)y=0
             
-            if(menor.value >= this.state.data[y][x]){
+            if(menor.value >= this.entorno[y][x]){
                 
-                menor.value=this.state.data[y][x]
+                menor.value=this.entorno[y][x]
                 menor.x=x
                 menor.y=y
                 menor.action=possibleActions[i]
@@ -88,10 +87,10 @@ class CleanerAgent extends Agent {
             }
         }
             
-        if(this.initialState.data[menor.y][menor.x] !== 1){
+        
             
-            return [menor.action,{x:menor.x,y:menor.y}]
-        }
+        return [menor.action,{x:menor.x,y:menor.y}]
+        
 
         
         
@@ -105,26 +104,57 @@ class CleanerAgent extends Agent {
     send() {
         
         let [action,position] = this.setAction()
-      
         this.updatex(position)
-
         return action;
 
+    }
+    showMatrix(matrix){
+        let m= JSON.parse(JSON.stringify(matrix))
+        m[this.state.y][this.state.x]='x'
+        for (let line of m) {
+            console.log(line)
+        }
+    }
+    createColumn(y){
+        if(!this.entorno[y]){
+            this.entorno[y]=[]
+        }
+    }
+    updateEntorno(){
+        //LEFT, UP, RIGHT, DOWN, CELL
+        this.createColumn(this.state.y)
+        let x=this.state.x
+        let y= this.state.y
+        //LEFT
+        if(x-1>=0){
+            if(this.entorno[this.state.y][this.state.x-1] !== 1){
+            this.entorno[this.state.y][this.state.x-1]=this.perception[0]
+            }
+        }
+        //UP
+        if(y-1>=0){
+            
+            this.createColumn(this.state.y-1)
+            if(this.entorno[this.state.y-1][this.state.x] !== 1){
+            this.entorno[this.state.y-1][this.state.x]=this.perception[1]
+            }
+        }
+        //RIGHT
+        if(this.entorno[this.state.y][this.state.x+1] !== 1){
+        this.entorno[this.state.y][this.state.x+1]=this.perception[2]
+        }
+        //DOWN
+        this.createColumn(this.state.y+1)
+        if(this.entorno[this.state.y+1][this.state.x] !== 1){
+        this.entorno[this.state.y+1][this.state.x]=this.perception[3]
+        }
+
+        
+    
     }
     
 
 }
-function clone(initialState){
 
-      let clone = {}; // the new empty object
-      
-      // let's copy all user properties into it
-      for (let key in initialState) {
-        if (initialState.hasOwnProperty(key)) {
-        clone[key] = initialState[key];
-       }
-      }
-      return clone
-}
 
 module.exports = CleanerAgent;

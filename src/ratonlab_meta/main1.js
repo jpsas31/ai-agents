@@ -3,11 +3,7 @@ const RatonAgent = require('./ratonAgent');
 
 let myProblem = new RatonProblem({ maxIterations: 12 });
 
-myProblem.addAgent("Smith", RatonAgent, {raton: { x: 0, y: 2 }, queso: {x: 3, y: 1},data:[
-    [0, 0, 0, 0],
-    [0, 1, 1, -1],
-    [0, 1, 0, 0],
-    [0, 0, 0, 1]]});
+myProblem.addAgent("Smith", RatonAgent, {raton: { x: 0, y: 2 }, queso: {x: 3, y: 1}});
 myProblem.solve([
     [0, 0, 0, 0],
     [0, 1, 1, -1],
