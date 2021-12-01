@@ -26,19 +26,16 @@ class CleanerAgent extends Agent {
             "1,1,1,0,0": ["DOWN"],
             "default": ["TAKE"]
         };
-
+        this.entorno=[[]]
     }
     
     setup(initialState = {}) {
         this.initialState = initialState
-        
-        this.state=clone(initialState)
-        this.state.data=JSON.parse(JSON.stringify(initialState.data))
+        this.state=initialState
     }
     updatex(position){
         
-        this.state.data[this.state.raton.y][this.state.raton.x]+=1
-        console.log(this.state.data)
+        this.entorno[this.state.raton.y][this.state.raton.x]+=1
         this.state.raton.x=position.x
         this.state.raton.y=position.y
 
@@ -47,7 +44,7 @@ class CleanerAgent extends Agent {
     setAction(){
         let viewKey = this.perception.slice(0,5).join();
         let possibleActions= this.table[viewKey];
-        console.log(possibleActions)
+        this.updateEntorno()
         if(!possibleActions){
             possibleActions = this.table['default']
         }
@@ -80,7 +77,7 @@ class CleanerAgent extends Agent {
             
             if(y<0)y=0
             let chebyDist=Math.max(Math.abs(this.state.queso.x-x),Math.abs(this.state.queso.y-y))
-            if(menor.distance >= chebyDist  && menor.value >= this.state.data[y][x]){
+            if(menor.distance >= chebyDist  && menor.value >= this.entorno[y][x]){
                 
                 menor.distance=chebyDist
                 menor.x=x
@@ -90,10 +87,10 @@ class CleanerAgent extends Agent {
             }
         }
             
-            if(this.initialState.data[menor.y][menor.x] !== 1){
+            
                 
-                return [menor.action,{x:menor.x,y:menor.y}]
-            }
+            return [menor.action,{x:menor.x,y:menor.y}]
+            
 
         
         
@@ -113,20 +110,51 @@ class CleanerAgent extends Agent {
         return action;
 
     }
-    
-
-}
-function clone(initialState){
-
-    let clone = {}; // the new empty object
-    
-    // let's copy all user properties into it
-    for (let key in initialState) {
-      if (initialState.hasOwnProperty(key)) {
-      clone[key] = initialState[key];
-     }
+    showMatrix(matrix){
+        let m= JSON.parse(JSON.stringify(matrix))
+        m[this.state.raton.y][this.state.raton.x]='x'
+        for (let line of m) {
+            console.log(line)
+        }
     }
-    return clone
+    createColumn(y){
+        if(!this.entorno[y]){
+            this.entorno[y]=[]
+        }
+    }
+    updateEntorno(){
+        //LEFT, UP, RIGHT, DOWN, CELL
+        this.createColumn(this.state.raton.y)
+        let x=this.state.raton.x
+        let y= this.state.raton.y
+        //LEFT
+        if(x-1>=0){
+            if(this.entorno[this.state.raton.y][this.state.raton.x-1] !== 1){
+            this.entorno[this.state.raton.y][this.state.raton.x-1]=this.perception[0]
+            }
+        }
+        //UP
+        if(y-1>=0){
+            
+            this.createColumn(this.state.raton.y-1)
+            if(this.entorno[this.state.raton.y-1][this.state.raton.x] !== 1){
+            this.entorno[this.state.raton.y-1][this.state.raton.x]=this.perception[1]
+            }
+        }
+        //RIGHT
+        if(this.entorno[this.state.raton.y][this.state.raton.x+1] !== 1){
+        this.entorno[this.state.raton.y][this.state.raton.x+1]=this.perception[2]
+        }
+        //DOWN
+        this.createColumn(this.state.raton.y+1)
+        if(this.entorno[this.state.raton.y+1][this.state.raton.x] !== 1){
+        this.entorno[this.state.raton.y+1][this.state.raton.x]=this.perception[3]
+        }
+
+        
+    
+    }
+
 }
 
 
