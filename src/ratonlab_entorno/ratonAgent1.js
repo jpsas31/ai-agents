@@ -34,6 +34,11 @@ class CleanerAgent extends Agent {
         this.initialState = initialState
         this.state = initialState
     }
+
+    /**
+     * Actuliza la posicion del raton en el entorno del raton y en el estado 
+     * @param {x: integer, y: integer} position 
+     */
     updatex(position){
 
         this.entorno[this.state.y][this.state.x]=1
@@ -42,6 +47,12 @@ class CleanerAgent extends Agent {
         // console.log(this.entorno)
 
     }
+
+    /**
+     * Esta funcion  actualiza el entorno
+     * y retorna la accion que el raton va a tomar y la posicion de esa accion (util para actualizar el modelo de entorno)
+     * @returns 
+     */
     setAction(){
         let viewKey = this.perception.join();
         let possibleActions= this.table[viewKey];
@@ -71,7 +82,7 @@ class CleanerAgent extends Agent {
             if(x<0)x=0
             
             if(y<0)y=0
-            console.log(this.perception)
+            //console.log(this.perception)
             if(this.entorno[y][x] !== 1){
                 // console.log(possibleActions[i])
                 return [possibleActions[i],{x:x,y:y}]
@@ -90,11 +101,15 @@ class CleanerAgent extends Agent {
         let [action,position] = this.setAction()
       
         this.updatex(position)
-        this.showMatrix(this.entorno)
+        //this.showMatrix(this.entorno)
 
         return action;
 
     }
+
+    /**
+     * Funcion auxiliar que muestra la matriz, sirve para visualizar el modelo de entorno del raton
+     */
     showMatrix(matrix){
         let m= JSON.parse(JSON.stringify(matrix))
         m[this.state.y][this.state.x]='x'
@@ -102,11 +117,19 @@ class CleanerAgent extends Agent {
             console.log(line)
         }
     }
+    /**
+     * Crea una columna en caso de no existir, esto permite crear de forma dinamica una matriz nxm que es la estructura de datos 
+     * @param {integer} y 
+     */
     createColumn(y){
         if(!this.entorno[y]){
             this.entorno[y]=[]
         }
     }
+
+    /**
+     * Actualiza el entorno del raton de acuerdo a la percepcion que recibe
+     */
     updateEntorno(){
         //LEFT, UP, RIGHT, DOWN, CELL
     //    console.log(this.perception)
@@ -137,11 +160,7 @@ class CleanerAgent extends Agent {
         if(this.entorno[this.state.y+1][this.state.x] !== 1){
         this.entorno[this.state.y+1][this.state.x]=this.perception[3]
         }
-
-        
-    
-    }
-    
+    } 
 
 }
 
