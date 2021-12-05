@@ -1,9 +1,5 @@
 const Agent = require('../core/Agent');
 
-/**
- * Simple reflex agent. Search for an object whithin a labyrinth. 
- * If the object is found the agen take it.
- */
 class CleanerAgent extends Agent {
     constructor(value) {
         super(value);
@@ -34,23 +30,25 @@ class CleanerAgent extends Agent {
         this.state = initialState
     }
     updatex(position){
-        
+        //sumar a la celda que se visitó
         this.entorno[this.state.y][this.state.x]+=1
-        // console.log(this.entorno)
         this.state.x=position.x
         this.state.y=position.y
 
     }
+    //Funcion para decidir que accion se va a tomar con la percepcion obtenida
     setAction(){
         let viewKey = this.perception.join();
         let possibleActions= this.table[viewKey];
        
         this.updateEntorno()
         if(!possibleActions){
+            //si no hay mas acciones entonces se come
             possibleActions = this.table['default']
         }
+        //objeto definido para determinar la celda a la que hay que ir
         let menor={
-            value:1,
+            value:1,//cantidad de veces que ha sido visitada la celda en la posicion x y
             x:0,
             y:0,
             action:""
@@ -76,7 +74,7 @@ class CleanerAgent extends Agent {
             if(x<0)x=0
             
             if(y<0)y=0
-            
+            //revisar si la nueva posible accion va a una celda que ha sido visitada menos cantidad de veces
             if(menor.value >= this.entorno[y][x]){
                 
                 menor.value=this.entorno[y][x]
@@ -97,10 +95,7 @@ class CleanerAgent extends Agent {
         
     }
 
-    /**
-     * We override the send method. 
-     * In this case, the state is just obtained as the join of the perceptions
-     */
+  
     send() {
         
         let [action,position] = this.setAction()
@@ -108,6 +103,9 @@ class CleanerAgent extends Agent {
         return action;
 
     }
+    /**
+     * Funcion auxiliar que muestra la matriz, sirve para visualizar el modelo de entorno del raton
+     */
     showMatrix(matrix){
         let m= JSON.parse(JSON.stringify(matrix))
         m[this.state.y][this.state.x]='x'
@@ -115,11 +113,18 @@ class CleanerAgent extends Agent {
             console.log(line)
         }
     }
+    /**
+     * Crea una columna en caso de no existir, esto permite crear de forma dinamica una matriz nxm que es la estructura de datos 
+     * @param {integer} y 
+     */
     createColumn(y){
         if(!this.entorno[y]){
             this.entorno[y]=[]
         }
     }
+    /**
+     * Actualiza el entorno del raton de acuerdo a la percepcion que recibe
+     */
     updateEntorno(){
         //LEFT, UP, RIGHT, DOWN, CELL
         this.createColumn(this.state.y)
