@@ -20,50 +20,40 @@ class Nodo:
                     return False
         return True
 
-    def getSolucion(self):
-        # if(self.padre is None):
-        #     return ''
-        # return self.operadorAplicado+self.padre.solucion()
-        return self.solucion
-
     #metodos que facilitan la creacion de nodos de acuerdo a las reglas del juego
 
     #retorna verdadero o falso si sobre la posicion pasada se encuentra una caja
-    def hayCaja(self,x,y):
+    def hayCaja(self,posicion):
         hay_Caja = False
         for caja in self.estado.posCajas:
-            if(x == caja.x and y == caja.y):
+            if(posicion.x == caja.x and posicion.y == caja.y):
                 hay_Caja = True
         return hay_Caja
+    
+    def hayMuro(self,posicion):
+        return self.estado.tablero[posicion.x][posicion.y] == 'W'
 
-    #actualiza la posicion de una caja para un nuevo nodo retornando la lista de cajas
-    def actualizarCaja(self, x, y, nx, ny):
+    #actualiza la posicion de una caja para un nuevo nodo retornando la lista de cajas (por valor)
+    def actualizarCaja(self, posicionActual, nuevaPosicion):
         cajas = self.estado.posCajas[:]
         nuevasCajas = []
         for caja in cajas:
-            if(caja.x == x and caja.y == y):
-                aux = Posicion()
-                aux.x = nx
-                aux.y = ny
+            if(caja.x == posicionActual.x and caja.y == posicionActual.y):
+                aux = Posicion.positionGiven(nuevaPosicion.x, nuevaPosicion.y)
                 nuevasCajas.append(aux)
             else:
                 nuevasCajas.append(caja)
         return nuevasCajas
     
-    def hayMuro(self,x,y):
-        return self.estado.tablero[x][y] == 'W'
+    def crearNodo(self,posicionAlmacenista,operador,moviCaja = False,posicionCaja = False):
 
-    def crearNodo(self,x,y,operador,moviCaja = False,cx = False,cy = False):
-
-        nuevaPosicion = Posicion()
-        nuevaPosicion.x = x
-        nuevaPosicion.y = y
+        nuevaPosicion = posicionAlmacenista
 
         estado = Estado()
         estado.tablero = self.estado.tablero
         estado.posAlmacenista = nuevaPosicion 
-        if(cx != False and cy != False):
-            estado.posCajas = self.actualizarCaja(x,y,cx,cy)
+        if(posicionCaja != False):
+            estado.posCajas = self.actualizarCaja(posicionAlmacenista,posicionCaja)
         else:
             estado.posCajas = self.estado.posCajas[:]
 
@@ -78,31 +68,26 @@ class Nodo:
 
         return nodo
 
-    def crearNodoOperador(self,x,y,operador, direccionx = 0, direcciony = 0):
-        if(not(self.hayMuro(x,y))):
-            if(self.hayCaja(x,y)):
-                if(not(self.hayMuro(x+direccionx,y+direcciony)) and not(self.hayCaja(x+direccionx,y+direcciony))):
-                    return self.crearNodo(x,y,operador,True,x+direccionx,y+direcciony)
+    def crearNodoOperador(self,nuevaPosicion,operador, nuevaPosicionCaja):
+        if(not(self.hayMuro(nuevaPosicion))):
+            if(self.hayCaja(nuevaPosicion)):
+                if(not(self.hayMuro(nuevaPosicionCaja)) and not(self.hayCaja(nuevaPosicionCaja))):
+                    return self.crearNodo(nuevaPosicion,operador,True,nuevaPosicionCaja)
             else:
-                return (self.crearNodo(x,y,operador))
+                return (self.crearNodo(nuevaPosicion,operador))
         return None
 
     def crearNodos(self):
         nodos = []
         pos = self.estado.posAlmacenista
-        
-        if(self.operadorAplicado != 'D' or self.moviCaja):
-            nodos.append(self.crearNodoOperador(pos.x-1, pos.y,'U',-1,0))
-        if(self.operadorAplicado != 'U' or self.moviCaja):
-            nodos.append(self.crearNodoOperador(pos.x+1, pos.y,'D',1,0))  
-        if(self.operadorAplicado != 'R' or self.moviCaja):
-            nodos.append(self.crearNodoOperador(pos.x, pos.y-1,'L',0,-1))     
-        if(self.operadorAplicado != 'L' or self.moviCaja):
-            nodos.append(self.crearNodoOperador(pos.x, pos.y+1,'R',0,1))
+    
+        nodos.append(self.crearNodoOperador(Posicion.positionGiven(pos.x-1,pos.y),'U',Posicion.positionGiven(pos.x-1-1,pos.y)))
+        nodos.append(self.crearNodoOperador(Posicion.positionGiven(pos.x+1,pos.y),'D',Posicion.positionGiven(pos.x+1+1,pos.y)))
+        nodos.append(self.crearNodoOperador(Posicion.positionGiven(pos.x,pos.y-1),'L',Posicion.positionGiven(pos.x,pos.y-1-1)))   
+        nodos.append(self.crearNodoOperador(Posicion.positionGiven(pos.x,pos.y+1),'R',Posicion.positionGiven(pos.x,pos.y+1+1)))
 
         aux = []
         for nodo in nodos:
             if not(nodo is None):
-                aux.append(nodo)
-        
+                aux.append(nodo) 
         return aux
