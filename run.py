@@ -5,7 +5,7 @@ from posicion import Posicion
 archivo = open('nivel1.txt')
 nodoraiz = Nodo()
 for linea in archivo:
-
+    # print(linea)
 #inicio del script
 
 # while(True):
@@ -34,20 +34,30 @@ for index,linea in enumerate(nodoraiz.estado.tablero):
             nodoraiz.posPuntosLLegada.append(aux)
             
 #amplitud
-cola = []
-cola.append(nodoraiz)
+# cola = []
+# cola.append(nodoraiz)
+# while(True):
+#     nodo = cola.pop(0)
+#     if(nodo.esMeta()):
+#         print(nodo.getSolucion())
+#         break
+#     else:
+#         cola.extend(nodo.crearNodos())
 
-for index, nodo in enumerate(cola):
-    if(nodo.profundidad == 10):
-        continue
+# print("salio")
+
+        
+#profundo
+pila = []
+pila.append(nodoraiz)
+while(True):
+    nodo = pila.pop()
+    print(nodo.profundidad)
+  
+
     if(nodo.esMeta()):
-        print(nodo.solucion())
+        print(nodo.getSolucion())
         break
     else:
-        cola.extend(nodo.crearNodos())
-
-#profundidad
-# pila = []
-# cola.append(nodoraiz)
-
-# for index,nodo in enumerate(pila):
+        if(nodo.profundidad== 30): continue
+        pila.extend(nodo.crearNodos())

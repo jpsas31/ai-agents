@@ -5,6 +5,7 @@ class Nodo:
     def __init__(self):
         self.estado = Estado()
         self.padre = None
+        self.solucion = ''
         self.operadorAplicado = ''
         self.profundidad = 0
         self.moviCaja = False
@@ -19,10 +20,11 @@ class Nodo:
                     return False
         return True
 
-    def solucion(self):
-        if(self.padre is None):
-            return ''
-        return self.operadorAplicado+self.padre.solucion()
+    def getSolucion(self):
+        # if(self.padre is None):
+        #     return ''
+        # return self.operadorAplicado+self.padre.solucion()
+        return self.solucion
 
     #metodos que facilitan la creacion de nodos de acuerdo a las reglas del juego
 
@@ -67,6 +69,7 @@ class Nodo:
 
         nodo = Nodo()
         nodo.estado = estado
+        nodo.solucion = self.solucion + operador
         nodo.moviCaja = moviCaja
         nodo.profundidad = self.profundidad + 1
         nodo.padre = self
