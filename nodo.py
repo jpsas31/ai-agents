@@ -8,6 +8,7 @@ class Nodo:
         self.solucion = ''
         self.profundidad = 0
         self.mundo = {}
+        self.operador_aplicado = ''
         
     def es_meta(self):
         for caja in self.estado.pos_cajas:
@@ -56,6 +57,7 @@ class Nodo:
         nodo.padre = self
         nodo.solucion = self.solucion + operador
         nodo.profundidad = self.profundidad + 1
+        nodo.operador_aplicado = operador
         return nodo
 
     def puedo_crear_nodo(self,nueva_posicion,operador, nueva_posicion_caja):
