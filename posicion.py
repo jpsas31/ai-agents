@@ -4,8 +4,12 @@ class Posicion:
         self.y = -1
     
     @classmethod
-    def positionGiven(cls, x, y):
+    def position_given(cls, x, y):
         aux = cls()
         aux.x = x
         aux.y = y
         return aux
+
+    def __repr__(self):
+        return str(self.x)+'-'+str(self.y)
+        
