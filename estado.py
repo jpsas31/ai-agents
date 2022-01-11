@@ -3,6 +3,6 @@ from posicion import Posicion
 class Estado:
     def __init__(self):
         self.tablero = []
-        self.posAlmacenista = Posicion()  
-        self.posCajas = []
+        self.pos_almacenista = Posicion()  
+        self.pos_cajas = []
         
