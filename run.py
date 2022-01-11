@@ -2,57 +2,74 @@ from nodo import Nodo
 from posicion import Posicion
 
 
-archivo = open('nivel1.txt')
-nodoraiz = Nodo()
-for linea in archivo:
-    # print(linea)
-#inicio del script
-
+nodo_raiz = Nodo()
 # while(True):
 #     try:
 #         linea = input()
 #     except:
-#           break  
+#           break
+archivo = open('nivel1.txt')
+for linea in archivo:
+
     if(linea.find(',') == -1):
-        nodoraiz.estado.tablero.append(linea)
+        nodo_raiz.estado.tablero.append(linea)
     else:
-        if(nodoraiz.estado.posAlmacenista.x == -1):
-            nodoraiz.estado.posAlmacenista.x = int(linea[0])
-            nodoraiz.estado.posAlmacenista.y = int(linea[2])
+        if(nodo_raiz.estado.pos_almacenista.x == -1):
+            nodo_raiz.estado.pos_almacenista = Posicion.position_given(int(linea[0]),int(linea[2])) 
         else:
-            aux = Posicion.positionGiven(int(linea[0]), int(linea[2]))
-            nodoraiz.estado.posCajas.append(aux)
+            nodo_raiz.estado.pos_cajas.append(Posicion.position_given(int(linea[0]), int(linea[2])))
 
-for index,linea in enumerate(nodoraiz.estado.tablero):
-    for pos, caracter in enumerate(linea):
-        if(caracter == 'X'):
-            aux = Posicion.positionGiven(index, pos)
-            nodoraiz.posPuntosLLegada.append(aux)
-            
-#amplitud
-cola = []
-cola.append(nodoraiz)
-while(True):
-    nodo = cola.pop(0)
-    if(nodo.esMeta()):
-        print(nodo.solucion)
-        break
-    else:
-        cola.extend(nodo.crearNodos())
 
-print("salio")
+def amplitud(nodo_raiz):
+    cola = []
+    cola.append(nodo_raiz)
+    while(True):
+        nodo = cola.pop(0)
+        if(nodo.es_meta()):
+            print(nodo.solucion)
+            break
+        else:
+            cola.extend(nodo.crear_nodos())
 
         
-#profundo
-# pila = []
-# pila.append(nodoraiz)
-# while(True):
-#     nodo = pila.pop()
-#     print(nodo.profundidad)
-  
-#     if(nodo.esMeta()):
-#         print(nodo.solucion)
-#         break
-#     else:
-#         if(nodo.profundidad== 30): continue
-#         pila.extend(nodo.crearNodos())
+def profundidad(nodo_raiz):
+    pila = []
+    pila.append(nodo_raiz)
+    while(True):
+        if(len(pila) == 0):
+            break
+        nodo = pila.pop()
+        if(nodo.profundidad == 64):
+            continue
+        if(nodo.es_meta()):
+            print(nodo.solucion)
+            break
+        else:
+            pila.extend(nodo.crear_nodos())
+
+
+def profundidad_iterativa(nodo_raiz):
+    pila = []
+    pila.append(nodo_raiz)
+    iterador = 10
+    while(True):
+        if(len(pila) == 0):
+            iterador += 1
+            break
+        nodo = pila.pop()
+        if(nodo.profundidad == iterador):
+            continue
+        if(nodo.es_meta()):
+            print(nodo.solucion)
+            break
+        else:
+            pila.extend(nodo.crear_nodos())
+    if(iterador != 64):
+        nodo_raiz.mundo = {}
+        profundidad_iterativa(nodo_raiz)
+
+amplitud(nodo_raiz)
+nodo_raiz.mundo = {}
+profundidad(nodo_raiz)
+nodo_raiz.mundo = {}
+profundidad_iterativa(nodo_raiz)
