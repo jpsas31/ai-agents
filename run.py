@@ -24,52 +24,53 @@ def amplitud(nodo_raiz):
     cola = []
     cola.append(nodo_raiz)
     while(True):
+        if(len(cola) == 0):
+            return None
+        
         nodo = cola.pop(0)
+        
+        if(nodo.profundidad > 64):
+            return None
+        
         if(nodo.es_meta()):
-            print(nodo.solucion)
-            break
+            return nodo.solucion
         else:
             cola.extend(nodo.crear_nodos())
 
         
-def profundidad(nodo_raiz):
+def profundidad(nodo_raiz, profundidad):
     pila = []
     pila.append(nodo_raiz)
     while(True):
         if(len(pila) == 0):
-            break
+            return None
+        
         nodo = pila.pop()
-        if(nodo.profundidad == 64):
-            continue
+       
         if(nodo.es_meta()):
-            print(nodo.solucion)
-            break
+            return nodo.solucion
         else:
-            pila.extend(nodo.crear_nodos())
+            if(nodo.profundidad < profundidad):
+                pila.extend(nodo.crear_nodos()) # aqui se deben reordenar los nodos para que tenga prioridad de acuerdo al orden que planteo el profesor antes
+                                                # de añadirlos a la pila
 
 
 def profundidad_iterativa(nodo_raiz):
-    pila = []
-    pila.append(nodo_raiz)
-    iterador = 10
+    profundidad_inicial = 10
     while(True):
-        if(len(pila) == 0):
-            iterador += 1
-            break
-        nodo = pila.pop()
-        if(nodo.profundidad == iterador):
-            continue
-        if(nodo.es_meta()):
-            print(nodo.solucion)
-            break
-        else:
-            pila.extend(nodo.crear_nodos())
-    if(iterador != 64):
-        nodo_raiz.mundo = {}
-        profundidad_iterativa(nodo_raiz)
+        if(profundidad_inicial > 64):
+            return None
 
-amplitud(nodo_raiz)
+        nodo_raiz.mundo = {}
+        res = profundidad(nodo_raiz, profundidad_inicial)
+        
+        if(res is None):
+            profundidad_inicial += 1
+        else:
+            return res
+
+print(amplitud(nodo_raiz))
 nodo_raiz.mundo = {}
-profundidad(nodo_raiz)
+print(profundidad(nodo_raiz, 64))
 nodo_raiz.mundo = {}
-profundidad_iterativa(nodo_raiz)
+print(profundidad_iterativa(nodo_raiz))
