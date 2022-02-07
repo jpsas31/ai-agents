@@ -12,7 +12,7 @@ archivo = open('nivel1.txt')
 for linea in archivo:
 
     if(linea.find(',') == -1):
-        nodo_raiz.estado.tablero.append(linea)
+        nodo_raiz.tablero.append(linea)
     else:
         if(nodo_raiz.estado.pos_almacenista.x == -1):
             nodo_raiz.estado.pos_almacenista = Posicion.position_given(int(linea[0]),int(linea[2])) 
@@ -70,7 +70,7 @@ def profundidad_iterativa(nodo_raiz):
             return res
 
 print(amplitud(nodo_raiz))
-nodo_raiz.mundo = {}
+
 print(profundidad(nodo_raiz, 64))
-nodo_raiz.mundo = {}
+
 print(profundidad_iterativa(nodo_raiz))
