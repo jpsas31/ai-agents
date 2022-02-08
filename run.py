@@ -3,6 +3,7 @@ from posicion import Posicion
 
 
 nodo_raiz = Nodo()
+
 # while(True):
 #     try:
 #         linea = input()
@@ -69,8 +70,8 @@ def profundidad_iterativa(nodo_raiz):
         else:
             return res
 
-print(amplitud(nodo_raiz))
+#print(amplitud(nodo_raiz))
 
-print(profundidad(nodo_raiz, 64))
+# print(profundidad(nodo_raiz, 64))
 
-print(profundidad_iterativa(nodo_raiz))
+# print(profundidad_iterativa(nodo_raiz))
