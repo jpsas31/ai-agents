@@ -14,9 +14,18 @@ class Estado:
 
         valor = True
 
-        for index,posCaja in enumerate(self.pos_cajas):
-            if(posCaja != other.pos_cajas[index]):
+        for index,pos_caja in enumerate(self.pos_cajas):
+            if(pos_caja != other.pos_cajas[index]):
                 valor = False
                 break
 
         return ((self.pos_almacenista == other.pos_almacenista) and valor )
+
+    def __repr__(self):
+
+        valor = str(self.pos_almacenista)+';'
+
+        for pos_caja in self.pos_cajas:
+            valor += str(pos_caja)
+
+        return valor
