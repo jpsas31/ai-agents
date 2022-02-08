@@ -10,7 +10,7 @@ nodo_raiz = Nodo()
 #         linea = input()
 #     except:
 #           break
-archivo = open('nivel1.txt')
+archivo = open('niveles/nivel4.txt')
 for linea in archivo:
 
     if(linea.find(',') == -1):
@@ -23,6 +23,7 @@ for linea in archivo:
 
 
 def amplitud(nodo_raiz):
+    almacen = {}
     cola = []
     cola.append(nodo_raiz)
     while(True):
@@ -36,11 +37,20 @@ def amplitud(nodo_raiz):
         
         if(nodo.es_meta()):
             return nodo.solucion
-        else:
-            cola.extend(quitar_ciclos(nodo.crear_nodos(), -1))
+
+        nodos = nodo.crear_nodos()
+
+        for nodo_anadir in nodos:
+            estado = str(nodo_anadir.estado)
+            
+            if(not(almacen.get(estado)) or (almacen.get(estado) and (nodo_anadir.profundidad < almacen.get(estado).profundidad))):
+                almacen.update({estado: nodo_anadir })
+                cola.append(nodo_anadir)
+                
 
         
 def profundidad(nodo_raiz, profundidad):
+    almacen = {}
     pila = []
     pila.append(nodo_raiz)
     while(True):
@@ -51,10 +61,17 @@ def profundidad(nodo_raiz, profundidad):
        
         if(nodo.es_meta()):
             return nodo.solucion
-        else:
-            if(nodo.profundidad < profundidad):
-                pila.extend(quitar_ciclos(nodo.crear_nodos(), -1)) # aqui se deben reordenar los nodos para que tenga prioridad de acuerdo al orden que planteo el profesor antes
-                                                # de añadirlos a la pila
+
+        if(nodo.profundidad < profundidad):
+            
+            nodos = nodo.crear_nodos()
+
+            for nodo_anadir in nodos:
+                estado = str(nodo_anadir.estado)
+                
+                if(not(almacen.get(estado)) or (almacen.get(estado) and (nodo_anadir.profundidad < almacen.get(estado).profundidad))):
+                    almacen.update({estado: nodo_anadir })
+                    pila.append(nodo_anadir)
 
 
 def profundidad_iterativa(nodo_raiz):
@@ -66,13 +83,13 @@ def profundidad_iterativa(nodo_raiz):
         nodo_raiz.mundo = {}
         res = profundidad(nodo_raiz, profundidad_inicial)
         
-        if(res is None):
-            profundidad_inicial += 1
-        else:
+        if(res is not None):
             return res
+        
+        profundidad_inicial += 1
+        
+print(amplitud(nodo_raiz))
 
-#print(amplitud(nodo_raiz))
+print(profundidad(nodo_raiz, 64))
 
-#print(profundidad(nodo_raiz, 64))
-
-#print(profundidad_iterativa(nodo_raiz))
+print(profundidad_iterativa(nodo_raiz))
