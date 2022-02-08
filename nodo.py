@@ -17,8 +17,8 @@ class Nodo:
         return True
 
     def hay_caja(self,posicion):
-        for caja in self.estado.pos_cajas:
-            if(posicion.x == caja.x and posicion.y == caja.y):
+        for posCaja in self.estado.pos_cajas:
+            if(posCaja == posicion):
                 return True
         return False
 
@@ -31,7 +31,7 @@ class Nodo:
             return cajas
         
         for index,caja in enumerate(cajas):
-            if(caja.x == posicion_actual.x and caja.y == posicion_actual.y):
+            if(caja == posicion_actual):
                 cajas.pop(index)
                 cajas.insert(index, Posicion.position_given(nueva_posicion.x, nueva_posicion.y))
         return cajas
@@ -64,10 +64,10 @@ class Nodo:
         nodos = []
         pos = self.estado.pos_almacenista    
 
-        arriba = self.puedo_crear_nodo(Posicion.position_given(pos.x-1,pos.y),'U',Posicion.position_given(pos.x-1-1,pos.y))
-        abajo = self.puedo_crear_nodo(Posicion.position_given(pos.x+1,pos.y),'D',Posicion.position_given(pos.x+1+1,pos.y))
-        izquierda = self.puedo_crear_nodo(Posicion.position_given(pos.x,pos.y-1),'L',Posicion.position_given(pos.x,pos.y-1-1))
-        derecha = self.puedo_crear_nodo(Posicion.position_given(pos.x,pos.y+1),'R',Posicion.position_given(pos.x,pos.y+1+1))
+        arriba = self.puedo_crear_nodo(Posicion.position_given(pos.x-1,pos.y),'U',Posicion.position_given(pos.x-2,pos.y))
+        abajo = self.puedo_crear_nodo(Posicion.position_given(pos.x+1,pos.y),'D',Posicion.position_given(pos.x+2,pos.y))
+        izquierda = self.puedo_crear_nodo(Posicion.position_given(pos.x,pos.y-1),'L',Posicion.position_given(pos.x,pos.y-2))
+        derecha = self.puedo_crear_nodo(Posicion.position_given(pos.x,pos.y+1),'R',Posicion.position_given(pos.x,pos.y+2))
 
         nodos.append(arriba) if arriba is not None else 1
         nodos.append(abajo) if abajo is not None else 1
