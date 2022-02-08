@@ -1,7 +1,5 @@
-from re import I
 from nodo import Nodo
 from posicion import Posicion
-from ciclos import quitar_ciclos
 
 nodo_raiz = Nodo()
 
@@ -80,7 +78,6 @@ def profundidad_iterativa(nodo_raiz):
         if(profundidad_inicial > 64):
             return None
 
-        nodo_raiz.mundo = {}
         res = profundidad(nodo_raiz, profundidad_inicial)
         
         if(res is not None):
