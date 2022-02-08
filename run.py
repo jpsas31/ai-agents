@@ -1,6 +1,7 @@
+from re import I
 from nodo import Nodo
 from posicion import Posicion
-
+from ciclos import quitar_ciclos
 
 nodo_raiz = Nodo()
 
@@ -36,7 +37,7 @@ def amplitud(nodo_raiz):
         if(nodo.es_meta()):
             return nodo.solucion
         else:
-            cola.extend(nodo.crear_nodos())
+            cola.extend(quitar_ciclos(nodo.crear_nodos(), -1))
 
         
 def profundidad(nodo_raiz, profundidad):
@@ -52,7 +53,7 @@ def profundidad(nodo_raiz, profundidad):
             return nodo.solucion
         else:
             if(nodo.profundidad < profundidad):
-                pila.extend(nodo.crear_nodos()) # aqui se deben reordenar los nodos para que tenga prioridad de acuerdo al orden que planteo el profesor antes
+                pila.extend(quitar_ciclos(nodo.crear_nodos(), -1)) # aqui se deben reordenar los nodos para que tenga prioridad de acuerdo al orden que planteo el profesor antes
                                                 # de añadirlos a la pila
 
 
@@ -72,6 +73,6 @@ def profundidad_iterativa(nodo_raiz):
 
 #print(amplitud(nodo_raiz))
 
-# print(profundidad(nodo_raiz, 64))
+#print(profundidad(nodo_raiz, 64))
 
-# print(profundidad_iterativa(nodo_raiz))
+#print(profundidad_iterativa(nodo_raiz))
