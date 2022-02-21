@@ -1,6 +1,22 @@
 from estado import Estado
 from posicion import Posicion
 
+# Representa un nodo en el arbol formado por:
+#   estado ver clase Estado
+#   padre referencia a otro Nodo
+#   la solucion que se va construyendo
+#   la profundidad en la que se encuentra en el nodo
+#   operador_aplicado para llegar a este nodo
+#   tablero mapa del mundo
+
+# Funciones
+#   la función es_meta determina si el nodo actual es meta
+#   la funcion hay_caja determina si para una posicion (a la que se quiere mover el almacenista) existe una caja, retorna falso o verdadero
+#   la funcion hay_muro determina si para una posicion (a la que se quiere mover el almacenista) existe un muro, retorna falso o verdadero
+#   la función actualizar_cajas copia la lista de cajas de un estado, y actualiza de ser necesario la caja que se quiera mover
+#   la funcion crear_nodo crea un nodo nuevo tomando la posicion nueva a la que se quiere mover
+#   la funcion puedo_crear_nodo revisa que la posicion a la que queramos movernos cumpla las reglas del juego
+#   la funcion crear_nodos crea una lista de nodos ordenados por prioridad de UDLR en caso de que se pueda mover a esa decision 
 class Nodo:
     def __init__(self):
         self.estado = Estado()

@@ -1,5 +1,10 @@
 from posicion import Posicion
 
+# Representa un estado del juego formado por la posicion del almacenista y una lista
+# de la posicion de las cajas
+# el metodo __eq__ permite determinar si dos estados son iguales
+# el metodo __repr__ permite mostrar un objeto estado como cadena como patron pos-almacenista;pos-cajas...
+
 class Estado:
     def __init__(self):
         self.pos_almacenista = Posicion()  

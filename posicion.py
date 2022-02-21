@@ -1,3 +1,7 @@
+# Representa una posicion en el plano cartesiano
+# posee un constructor (position_given)
+# el metodo __repr__ representa el objeto como cadena de la forma x-y
+# el metodo __eq__ determina si una posicion es igual a otra
 class Posicion:
     def __init__(self):
         self.x = -1

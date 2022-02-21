@@ -3,13 +3,13 @@ from posicion import Posicion
 
 nodo_raiz = Nodo()
 
-# while(True):
-#     try:
-#         linea = input()
-#     except:
-#           break
-archivo = open('niveles/nivel4.txt')
-for linea in archivo:
+while(True):
+    try:
+        linea = input()
+    except:
+          break
+# archivo = open('niveles/nivel4.txt')
+# for linea in archivo:
 
     if(linea.find(',') == -1):
         nodo_raiz.tablero.append(linea)
